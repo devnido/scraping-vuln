@@ -1,0 +1,19 @@
+{
+    "name": "perri-scrapi-du",
+    "version": "1.0.0",
+    "description": "Pal perri",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon app"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^0.19.2",
+        "cheerio": "^1.0.0-rc.3",
+        "mongoose": "^5.9.4",
+        "unscape-html": "^0.1.0"
+    }
+}
