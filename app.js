@@ -1,3 +1,17 @@
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+app.set('ip', '0.0.0.0');
+app.set('port', 3000);
+app.set('trust proxy', true) // añadir configuracion al nginx
+app.disable('x-powered-by');
+app.use(cors());
+app.use(express.json())
+app.use(express.urlencoded({
+    extended: true
+}));
+
 const mongoose = require('mongoose')
 
 mongoose.Promise = global.Promise;
@@ -18,13 +32,16 @@ const mongoOptions = {
 
 mongoose.connect(connectionString, mongoOptions)
 
-const vulnController = require('./controller/vuln.controller')
 
-// escribir aqui las vulnerabilidades a buscar
-cves = ['CVE-2019-20556', 'CVE-2019-20562', 'CVE-2019-20579', 'CVE-2020-6983', 'CVE-2019-20547', 'CVE-2019-20563']
+//routes
+const routes = require('./routes');
+routes.init(express, app);
 
-// 
 
-vulnController.inicializarExtraccion(cves)
-    .then(result => console.log(result))
-    .catch(terror => console.log(terror))
+//start server
+const server = app.listen(app.get('port'), app.get('ip'), function() {
+    console.log('Server running in http://%s:%s', app.get('ip'), app.get('port'))
+    console.log(app.get('env'));
+});
+
+module.exports = server;

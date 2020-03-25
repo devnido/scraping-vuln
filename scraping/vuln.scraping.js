@@ -2,7 +2,7 @@ const cheerio = require('cheerio')
 const unscape = require('unscape-html')
 
 const scraping = {
-    scrapeOne: (pageHTML) => {
+    scrapeOneFromIncibe: (pageHTML) => {
         const $ = cheerio.load(pageHTML);
 
         const pageTitle = $('.page-title[title="Vulnerabilidades"] a').text()
@@ -35,7 +35,43 @@ const scraping = {
         }
 
 
+    },
+    scrapeOneFromNist: (pageHTML) => {
+        const $ = cheerio.load(pageHTML);
+
+        const serviceUnavailable = $('#page-content div h2').text().trim()
+
+        if (!serviceUnavailable.includes('CVE ID Not Found')) {
+
+            const affectsTo = []
+            $('.node-body .field-versions .field-items .field-item .version_list li').toArray().map(i => affectsTo.push($(i).html()))
+
+            const solutions = []
+            $('.node-body .field-references .field-items .field-item .references_list li').toArray().map(i => solutions.push($(i).find('a').html()))
+
+            const vuln = {
+                title: unscape($('span[data-testid="page-header-vuln-id"]').html().trim()),
+                vulnType: 'No disponible / Otro tipo',
+                severity: String,
+                publishAt: Date,
+                modifyAt: Date,
+                description: String,
+                accessVector: String,
+                accessComplexity: String,
+                auth: String,
+                impactType: String,
+                affectsTo: affectsTo,
+                solutions: solutions
+            }
+
+            return vuln;
+        } else {
+            return false;
+        }
+
+        return false;
     }
+
 }
 
 module.exports = scraping;

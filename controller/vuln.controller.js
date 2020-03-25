@@ -1,5 +1,4 @@
-const vulnRequest = require('../request/vuln.request')
-const vulnScrap = require('../scraping/vuln.scraping')
+const vulnService = require('../services/vuln.service')
 const vulnRepo = require('../repository/vuln.repository')
 
 const controller = {
@@ -21,18 +20,38 @@ const controller = {
 
 
             } else {
-                const pageHTML = await vulnRequest.getByCve(cve)
 
+                let data = {}
+                const existsIncibe = await vulnService.getDataFromIncibe(cve)
 
-                const data = vulnScrap.scrapeOne(pageHTML)
+                if (!existsIncibe) {
+
+                    // const existsIncibe = await vulnService.getDataFromIncibe(cve)
+
+                    // if (!existsIncibe) {
+                    //     // buscar en mitre
+
+                    //     data = false
+
+                    // } else {
+                    //     data = existsIncibe
+                    // }
+
+                    data = false
+
+                } else {
+                    data = existsIncibe
+                }
 
                 if (data) {
+
                     data.cve = cve
+
 
                     toInsert.push(data)
 
-                    console.log(data);
                 } else {
+
                     notFound.push(cve)
                 }
 
