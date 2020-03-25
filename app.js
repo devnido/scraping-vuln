@@ -20,6 +20,7 @@ mongoose.connect(connectionString, mongoOptions)
 
 const vulnController = require('./controller/vuln.controller')
 
+// escribir aqui las vulnerabilidades a buscar
 cves = ['CVE-2019-20556', 'CVE-2019-20562', 'CVE-2019-20579', 'CVE-2020-6983', 'CVE-2019-20547', 'CVE-2019-20563']
 
 // 
