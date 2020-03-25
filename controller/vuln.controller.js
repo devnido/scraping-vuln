@@ -1,41 +1,53 @@
-/* REPOSITORY */
+const vulnRequest = require('../request/vuln.request')
+const vulnScrap = require('../scraping/vuln.scraping')
 const vulnRepo = require('../repository/vuln.repository')
-
-const unscape = require('unscape-html')
-
-/* SCRAPING */
-const vulnScrap = require('../scraping/vuln.scrap')
-
-const cheerio = require('cheerio')
-
 
 const controller = {
 
+    getAll: () => {
+        return vulnRepo.getAll()
+    },
+
     inicializarExtraccion: async(cves) => {
 
-        const pageHTML = await vulnScrap.getDataFromPage(cves)
+        const toInsert = []
+        const notFound = []
 
-        const $ = cheerio.load(pageHTML);
+        for (const cve of cves) {
 
-        const vuln = {
-            title: $('.page-title').html().trim(),
-            vulnType: $('.node-body .field-type .field-items .field-item').html().trim(),
-            severity: $('.node-body .field-name-field-gravedad-txt .field-items .field-item .level-text').html().trim(),
-            publishAt: Date,
-            modifyAt: Date,
-            description: String,
-            affectsTo: String,
-            solutions: String
+            const exists = await vulnRepo.existsByCve(cve)
+
+            if (exists) {
+
+
+            } else {
+                const pageHTML = await vulnRequest.getByCve(cve)
+
+
+                const data = vulnScrap.scrapeOne(pageHTML)
+
+                if (data) {
+                    data.cve = cve
+
+                    toInsert.push(data)
+
+                    console.log(data);
+                } else {
+                    notFound.push(cve)
+                }
+
+            }
+
         }
 
-        const type = $('.node-body .field-name-field-gravedad-txt .field-items .field-item .level-text').html()
-
-        console.log(unscape(type));
+        if (toInsert.length > 0) {
+            return [await vulnRepo.insertMany(toInsert), notFound]
+        } else {
+            return [false, notFound];
+        }
 
 
     }
-
-
 
 }
 

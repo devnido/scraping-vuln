@@ -20,7 +20,9 @@ mongoose.connect(connectionString, mongoOptions)
 
 const vulnController = require('./controller/vuln.controller')
 
-cves = ['cve-2020-0655']
+cves = ['CVE-2019-20556', 'CVE-2019-20562', 'CVE-2019-20579', 'CVE-2020-6983', 'CVE-2019-20547', 'CVE-2019-20563']
+
+// 
 
 vulnController.inicializarExtraccion(cves)
     .then(result => console.log(result))

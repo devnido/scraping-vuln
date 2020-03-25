@@ -3,14 +3,19 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const vuln = new Schema({
+    cve: String,
     title: String,
     vulnType: String,
     severity: String,
     publishAt: Date,
     modifyAt: Date,
     description: String,
-    affectsTo: String,
-    solutions: String
+    accessVector: String,
+    accessComplexity: String,
+    auth: String,
+    impactType: String,
+    affectsTo: [String],
+    solutions: [String]
 
 }, {
     timestamps: true
