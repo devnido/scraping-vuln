@@ -11,7 +11,7 @@ Web scraping a pagina web de vulnerabilidades
 ## Como usar
 
 1. Iniciar servicio mongod
-2. ejecutar npm install 
-3. En la linea 24 del código fuente del archivo app.js escribir loc cve en el array
-4. ejecutar node app.js
-5. fin
+2. Ejecutar npm install 
+3. En la linea 24 del código fuente del archivo app.js escribir los cve en el array
+4. Ejecutar node app.js
+5. Fin
